@@ -104,3 +104,11 @@ class UserModel(Base):
         db.commit()
         db.refresh(new_user)
         return {"username": new_user.username, "fullname": new_user.fullname, "email": new_user.email}
+
+    @classmethod
+    def verify_token(cls, token):
+        stored_token = db.query(UserModel.token).filter(UserModel.token == token).all()
+        if token in stored_token:
+            return token
+        else:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token verification failed")

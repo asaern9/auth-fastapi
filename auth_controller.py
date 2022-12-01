@@ -36,5 +36,6 @@ async def register_user(form_data: UserSchemaRequest):
 
 
 @router.get("/users/profile/", response_model=UserSchemaResponse)
-async def view_profile(token: str = Depends(oauth2_scheme)):
+async def view_profile(user_token: str = Depends(oauth2_scheme)):
+    token = UserModel.verify_token(user_token)
     return UserModel.fetch_current_user(token)
