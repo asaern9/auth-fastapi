@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from auth_db import Base
 from alembic import context
+from auth_model import UserModel
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

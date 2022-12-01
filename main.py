@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 import auth_controller
-from auth_db import Base, engine
+
 app = FastAPI()
 
-Base.metadata.create_all(bind=engine)
+# Uncomment if you don't want to use alembic
+# Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_controller.router, tags=["USERS"])
 
