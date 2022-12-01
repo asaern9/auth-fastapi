@@ -11,13 +11,12 @@ router = APIRouter()
 
 settings = Settings()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 @lru_cache()
 def get_settings():
     return Settings()
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @router.post("/token", response_model=Token)
