@@ -107,8 +107,21 @@ class UserModel(Base):
 
     @classmethod
     def verify_token(cls, token):
-        stored_token = db.query(UserModel.token).filter(UserModel.token == token).all()
-        if token in stored_token:
+        stored_token = db.query(UserModel.token).all()
+        existing_stored_token = []
+        for i in range(len(stored_token)):
+            existing_stored_token.append(stored_token[i].token)
+        print(existing_stored_token)
+        print(token)
+        if token in existing_stored_token:
             return token
         else:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token verification failed")
+
+    @classmethod
+    def save_token(cls, token, username):
+        user = db.query(UserModel).filter(UserModel.username == username).first()
+        user.token = token
+        db.commit()
+        db.refresh(user)
+        return user
