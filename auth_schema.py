@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class Token(BaseModel):
@@ -12,7 +12,7 @@ class TokenData(BaseModel):
 
 class UserSchemaRequest(BaseModel):
     username: str
-    email: str | None = None
+    email: EmailStr | None = None
     fullname: str | None = None
     password: str
 
@@ -22,7 +22,4 @@ class UserSchemaResponse(BaseModel):
     email: str | None = None
     fullname: str | None = None
 
-
-class UserInDB(UserSchemaResponse):
-    hashed_password: str
 

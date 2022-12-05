@@ -11,7 +11,7 @@ router = APIRouter()
 
 settings = Settings()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 
 @lru_cache()
@@ -19,8 +19,13 @@ def get_settings():
     return Settings()
 
 
-@router.post("/token", response_model=Token)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+@router.post("/create/", response_model=UserSchemaResponse)
+async def sign_up(form_data: UserSchemaRequest):
+    return UserModel.save_user(form_data)
+
+
+@router.post("/login", response_model=Token)
+async def sign_in(form_data: OAuth2PasswordRequestForm = Depends()):
     user = UserModel.verify_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password",
@@ -29,11 +34,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = UserModel.generate_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
     UserModel.save_token(access_token, form_data.username)
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-@router.post("/create/", response_model=UserSchemaResponse)
-async def register_user(form_data: UserSchemaRequest):
-    return UserModel.save_user(form_data)
 
 
 @router.get("/profile/", response_model=UserSchemaResponse)

@@ -11,4 +11,4 @@ app.include_router(auth_controller.router, prefix="/user", tags=["USERS"])
 
 @app.get("/")
 async def index():
-    return "hey"
+    return "FastApi auth template"
