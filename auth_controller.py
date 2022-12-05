@@ -40,3 +40,10 @@ async def register_user(form_data: UserSchemaRequest):
 async def view_profile(user_token: str = Depends(oauth2_scheme)):
     token = UserModel.verify_token(user_token)
     return UserModel.fetch_current_user(token)
+
+
+@router.post("/users/logout")
+async def logout(token: str = Depends(oauth2_scheme)):
+    user = UserModel.fetch_current_user(token)
+    username = user["username"]
+    return UserModel.delete_token(username)

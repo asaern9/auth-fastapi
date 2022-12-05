@@ -125,3 +125,11 @@ class UserModel(Base):
         db.commit()
         db.refresh(user)
         return user
+
+    @classmethod
+    def delete_token(cls, username):
+        user = db.query(UserModel).filter(UserModel.username == username).first()
+        user.token = ""
+        db.commit()
+        db.refresh(user)
+        raise HTTPException(status_code=status.HTTP_200_OK, detail="Logout successful")
