@@ -6,7 +6,7 @@ app = FastAPI()
 # Uncomment if you don't want to use alembic
 # Base.metadata.create_all(bind=engine)
 
-app.include_router(auth_controller.router, tags=["USERS"])
+app.include_router(auth_controller.router, prefix="/user", tags=["USERS"])
 
 
 @app.get("/")

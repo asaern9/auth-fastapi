@@ -31,18 +31,18 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/users/create/", response_model=UserSchemaResponse)
+@router.post("/create/", response_model=UserSchemaResponse)
 async def register_user(form_data: UserSchemaRequest):
     return UserModel.save_user(form_data)
 
 
-@router.get("/users/profile/", response_model=UserSchemaResponse)
+@router.get("/profile/", response_model=UserSchemaResponse)
 async def view_profile(user_token: str = Depends(oauth2_scheme)):
     token = UserModel.verify_token(user_token)
     return UserModel.fetch_current_user(token)
 
 
-@router.post("/users/logout")
+@router.post("/logout")
 async def logout(token: str = Depends(oauth2_scheme)):
     user = UserModel.fetch_current_user(token)
     username = user["username"]
